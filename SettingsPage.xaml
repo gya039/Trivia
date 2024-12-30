@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TriviaApp.SettingsPage">
+
+    <StackLayout Padding="30">
+        <Label Text="Game Settings" FontSize="24" HorizontalOptions="Center" />
+        <Label Text="Number of Questions:" />
+        <Entry x:Name="questionsEntry" Placeholder="Enter number of questions" Keyboard="Numeric" />
+        <Label Text="Time Limit (seconds):" />
+        <Entry x:Name="timeLimitEntry" Placeholder="Enter time limit" Keyboard="Numeric" />
+        <Button Text="Save Settings" Clicked="OnSaveSettingsClicked" />
+    </StackLayout>
+</ContentPage>

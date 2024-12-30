@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TriviaApp.GamePage">
+
+    <StackLayout Padding="30">
+  
+        <Grid>
+        
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+    
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+          
+            <Label Grid.Row="0" Grid.Column="0" Text="Animals" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="0" Grid.Column="1" Text="Mythology" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="0" Grid.Column="2" Text="Sports" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="0" Grid.Column="3" Text="Geography" HorizontalOptions="Center" FontSize="18" />
+
+         
+            <Label Grid.Row="1" Grid.Column="0" Text="Politics" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="1" Grid.Column="1" Text="History" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="1" Grid.Column="2" Text="Celebrities" HorizontalOptions="Center" FontSize="18" />
+            <Label Grid.Row="1" Grid.Column="3" Text="General Knowledge" HorizontalOptions="Center" FontSize="18" />
+
+         
+            <Button Grid.Row="2" Grid.Column="0" Text="$200" CommandParameter="200" Clicked="OnCategorySelected" />
+            <Button Grid.Row="2" Grid.Column="1" Text="$200" CommandParameter="200" Clicked="OnCategorySelected" />
+            <Button Grid.Row="2" Grid.Column="2" Text="$200" CommandParameter="200" Clicked="OnCategorySelected" />
+            <Button Grid.Row="2" Grid.Column="3" Text="$200" CommandParameter="200" Clicked="OnCategorySelected" />
+
+            <Button Grid.Row="3" Grid.Column="0" Text="$400" CommandParameter="400" Clicked="OnCategorySelected" />
+            <Button Grid.Row="3" Grid.Column="1" Text="$400" CommandParameter="400" Clicked="OnCategorySelected" />
+            <Button Grid.Row="3" Grid.Column="2" Text="$400" CommandParameter="400" Clicked="OnCategorySelected" />
+            <Button Grid.Row="3" Grid.Column="3" Text="$400" CommandParameter="400" Clicked="OnCategorySelected" />
+
+            <Button Grid.Row="4" Grid.Column="0" Text="$600" CommandParameter="600" Clicked="OnCategorySelected" />
+            <Button Grid.Row="4" Grid.Column="1" Text="$600" CommandParameter="600" Clicked="OnCategorySelected" />
+            <Button Grid.Row="4" Grid.Column="2" Text="$600" CommandParameter="600" Clicked="OnCategorySelected" />
+            <Button Grid.Row="4" Grid.Column="3" Text="$600" CommandParameter="600" Clicked="OnCategorySelected" />
+
+            <Button Grid.Row="5" Grid.Column="0" Text="$800" CommandParameter="800" Clicked="OnCategorySelected" />
+            <Button Grid.Row="5" Grid.Column="1" Text="$800" CommandParameter="800" Clicked="OnCategorySelected" />
+            <Button Grid.Row="5" Grid.Column="2" Text="$800" CommandParameter="800" Clicked="OnCategorySelected" />
+            <Button Grid.Row="5" Grid.Column="3" Text="$800" CommandParameter="800" Clicked="OnCategorySelected" />
+
+            <Button Grid.Row="6" Grid.Column="0" Text="$1000" CommandParameter="1000" Clicked="OnCategorySelected" />
+            <Button Grid.Row="6" Grid.Column="1" Text="$1000" CommandParameter="1000" Clicked="OnCategorySelected" />
+            <Button Grid.Row="6" Grid.Column="2" Text="$1000" CommandParameter="1000" Clicked="OnCategorySelected" />
+            <Button Grid.Row="6" Grid.Column="3" Text="$1000" CommandParameter="1000" Clicked="OnCategorySelected" />
+        </Grid>
+
+        <Label x:Name="questionLabel" Text="Question will appear here" FontSize="24" HorizontalOptions="Center" />
+
+ 
+        <Label x:Name="timerLabel" Text="Time: 10s" FontSize="20" HorizontalOptions="Center" VerticalOptions="Start" />
+
+        <Button x:Name="answerButton1" Text="Answer 1" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" />
+        <Button x:Name="answerButton2" Text="Answer 2" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" />
+        <Button x:Name="answerButton3" Text="Answer 3" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" />
+        <Button x:Name="answerButton4" Text="Answer 4" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" />
+
+      
+        <Label x:Name="currentPlayerLabel" Text="Current Player: Player 1" FontSize="18" HorizontalOptions="Center" />
+
+       
+        <Label x:Name="scoreLabel" Text="Scores: Player 1: 0" />
+
+
+        <Label x:Name="loadingLabel" Text="Starting game, please wait..." FontSize="18" HorizontalOptions="Center" IsVisible="False" />
+        
+        <ActivityIndicator x:Name="loadingSpinner" IsRunning="False" IsVisible="False" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" />
+    </StackLayout>
+</ContentPage>
