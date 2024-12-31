@@ -4,6 +4,7 @@
              x:Class="TriviaApp.SettingsPage">
 
     <StackLayout Padding="30">
+ 
         <Label Text="Game Settings" FontSize="24" HorizontalOptions="Center" />
         <Label Text="Number of Questions:" />
         <Entry x:Name="questionsEntry" Placeholder="Enter number of questions" Keyboard="Numeric" />

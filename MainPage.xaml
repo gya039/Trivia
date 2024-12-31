@@ -4,26 +4,18 @@
              x:Class="TriviaApp.MainPage">
 
     <StackLayout Padding="30">
-  
         <Label Text="Select the Number of Players" FontSize="24" HorizontalOptions="Center" />
-
         <Button Text="1 Player" Clicked="OnPlayerCountSelected" />
         <Button Text="2 Players" Clicked="OnPlayerCountSelected" />
         <Button Text="3 Players" Clicked="OnPlayerCountSelected" />
         <Button Text="4 Players" Clicked="OnPlayerCountSelected" />
-
-
         <StackLayout x:Name="playerNameInputs">
             <Entry x:Name="playerName1" Placeholder="Enter Player 1 Name" IsVisible="False" />
             <Entry x:Name="playerName2" Placeholder="Enter Player 2 Name" IsVisible="False" />
             <Entry x:Name="playerName3" Placeholder="Enter Player 3 Name" IsVisible="False" />
             <Entry x:Name="playerName4" Placeholder="Enter Player 4 Name" IsVisible="False" />
         </StackLayout>
-
-
         <Button Text="Settings" Clicked="OnSettingsClicked" />
-
-   
         <Button x:Name="startGameButton" Text="Start Game" Clicked="OnStartGameClicked" IsEnabled="False" />
     </StackLayout>
-</ContentPage>
+</ContentPage> 

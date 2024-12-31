@@ -1,6 +1,5 @@
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
-
+using Microsoft.Maui.Storage; 
 namespace TriviaApp
 {
     public partial class SettingsPage : ContentPage
@@ -22,13 +21,15 @@ namespace TriviaApp
             {
                 await DisplayAlert("Error", "Please enter a valid time limit.", "OK");
                 return;
-
-                Preferences.Set("QuestionCount", questionCount);
-                Preferences.Set("TimeLimit", timeLimit);
-                await DisplayAlert("Settings Saved", "Your settings have been saved!", "OK");
-                await Navigation.PopAsync();
             }
-        }
 
+            Preferences.Set("QuestionCount", questionCount);
+            Preferences.Set("TimeLimit", timeLimit);
+
+            await DisplayAlert("Settings Saved", "Your settings have been saved!", "OK");
+            await Navigation.PopAsync();
+        }
     }
+
 }
+

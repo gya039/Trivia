@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TriviaApp.Answering">
+    <ScrollView>
+        <StackLayout Padding="20">
+
+            <Label x:Name="questionLabel" Text="Question will appear here" FontSize="24" HorizontalOptions="Center" />
+            <Label x:Name="timerLabel" Text="Time: 10s" FontSize="18" HorizontalOptions="Center" VerticalOptions="Start" />
+
+            <StackLayout x:Name="buzzerButtonsStack" Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+                <Button x:Name="buzzerButton1" Text="Player 1 Buzzer" Clicked="OnBuzzIn" />
+                <Button x:Name="buzzerButton2" Text="Player 2 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
+                <Button x:Name="buzzerButton3" Text="Player 3 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
+                <Button x:Name="buzzerButton4" Text="Player 4 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
+            </StackLayout>
+            <Button x:Name="answerButton1" Text="Answer 1" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
+            <Button x:Name="answerButton2" Text="Answer 2" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
+            <Button x:Name="answerButton3" Text="Answer 3" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
+            <Button x:Name="answerButton4" Text="Answer 4" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
+
+            <Button Text="Return to Game Board" Clicked="OnReturnToGameBoard" HorizontalOptions="Center" VerticalOptions="End" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>  
