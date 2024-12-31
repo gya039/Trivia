@@ -7,13 +7,13 @@ namespace TriviaApp
     {
         private string correctAnswer;
         private int currentDollarAmount;
-        private Action<bool> onAnswerCompleted;
+        private Action<bool, string> onAnswerCompleted;
         private bool isTimerRunning = false;
         private System.Timers.Timer timer;
         private string currentBuzzerPlayer = "";
         private string[] playerNames;
 
-        public Answering(string question, string[] answers, string correctAnswer, int dollarValue, string[] playerNames, Action<bool> onAnswerCompleted)
+        public Answering(string question, string[] answers, string correctAnswer, int dollarValue, string[] playerNames, Action<bool, string> onAnswerCompleted)
         {
             InitializeComponent();
             this.correctAnswer = correctAnswer;
@@ -27,7 +27,6 @@ namespace TriviaApp
             answerButton3.Text = answers[2];
             answerButton4.Text = answers[3];
 
-
             SetupBuzzers();
             StartTimer();
         }
@@ -36,14 +35,14 @@ namespace TriviaApp
         {
             if (playerNames.Length == 1)
             {
-                // Singleplayer
+          
                 currentBuzzerPlayer = playerNames[0];
                 EnableAnswerButtons();
                 buzzerButtonsStack.IsVisible = false;
             }
             else
             {
-                // Multiplyer
+              
                 buzzerButton1.IsVisible = playerNames.Length > 0;
                 buzzerButton2.IsVisible = playerNames.Length > 1;
                 buzzerButton3.IsVisible = playerNames.Length > 2;
@@ -56,13 +55,19 @@ namespace TriviaApp
             if (!isTimerRunning) return;
 
             Button buzzerButton = sender as Button;
-            currentBuzzerPlayer = buzzerButton?.Text.Replace(" Buzzer", "");
+
+          
+            currentBuzzerPlayer = buzzerButton?.Text.Replace(" Buzzer", "").Trim();
+
+            Console.WriteLine($"[DEBUG] Player who buzzed in: {currentBuzzerPlayer}");
 
             DisableBuzzers();
             EnableAnswerButtons();
 
             DisplayAlert("Buzzed In", $"{currentBuzzerPlayer} buzzed in!", "OK");
         }
+
+
 
         private void DisableBuzzers()
         {
@@ -87,18 +92,16 @@ namespace TriviaApp
             Button clickedButton = sender as Button;
             string selectedAnswer = clickedButton?.Text;
 
-
             timer.Stop();
             isTimerRunning = false;
 
             bool isCorrect = selectedAnswer == correctAnswer;
 
+            Console.WriteLine($"[DEBUG] Player: {currentBuzzerPlayer}, Answer: {selectedAnswer}, Correct: {isCorrect}");
+ 
+            onAnswerCompleted?.Invoke(isCorrect, currentBuzzerPlayer);
 
-            HighlightButtons(selectedAnswer);
-
-            onAnswerCompleted?.Invoke(isCorrect);
-
-
+            
             Device.StartTimer(TimeSpan.FromSeconds(2), () =>
             {
                 Navigation.PopAsync();
@@ -106,16 +109,18 @@ namespace TriviaApp
             });
         }
 
+
+
         private void HighlightButtons(string selectedAnswer)
         {
             ResetButtonColors();
             if (selectedAnswer == correctAnswer)
             {
-                HighlightButton(selectedAnswer, Color.FromArgb("#00FF00"));
+                HighlightButton(selectedAnswer, Color.FromArgb("#00FF00")); 
             }
             else
             {
-                HighlightButton(selectedAnswer, Color.FromArgb("#FF0000"));
+                HighlightButton(selectedAnswer, Color.FromArgb("#FF0000")); 
             }
         }
 
@@ -137,7 +142,7 @@ namespace TriviaApp
 
         private void StartTimer()
         {
-            timer = new System.Timers.Timer(10000);
+            timer = new System.Timers.Timer(10000); 
             timer.Elapsed += OnTimerElapsed;
             timer.Start();
             isTimerRunning = true;
@@ -151,7 +156,7 @@ namespace TriviaApp
             Device.BeginInvokeOnMainThread(() =>
             {
                 DisplayAlert("Time's Up", "You didn't answer in time!", "OK");
-                onAnswerCompleted?.Invoke(false);
+                onAnswerCompleted?.Invoke(false, currentBuzzerPlayer); 
                 Navigation.PopAsync();
             });
         }
