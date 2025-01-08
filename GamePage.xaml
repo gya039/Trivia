@@ -1,12 +1,31 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TriviaApp.GamePage">
+             x:Class="TriviaApp.GamePage"
+             BackgroundColor="#002868">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#002868" Offset="0.0" />
+            <GradientStop Color="#000080" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
     <ScrollView>
-        <StackLayout Padding="30">
-            <Grid x:Name="ChangingGrid">
-                    <Grid.RowDefinitions>
+        <StackLayout Padding="30" Spacing="20">
+            <Label Text="Jeopardy Game Board"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#ffc72c" />
+
+            <ActivityIndicator x:Name="loadingSpinner"
+                               IsRunning="True"
+                               Color="#ffc72c"
+                               HorizontalOptions="Center"
+                               VerticalOptions="CenterAndExpand" />
+
+            <Grid x:Name="ChangingGrid" ColumnSpacing="5" RowSpacing="5">
+                <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -22,53 +41,64 @@
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
+                <!-- $ categories -->
+                <Label Grid.Row="0" Grid.Column="0" Text="Animals"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                       FontSize="20" FontAttributes="Bold" TextColor="#FFFFFF" Padding="0,10,0,10" />
+                <Label Grid.Row="0" Grid.Column="1" Text="Mythology"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                       FontSize="20" FontAttributes="Bold" TextColor="#FFFFFF" Padding="0,10,0,10" />
+                <Label Grid.Row="0" Grid.Column="2" Text="Sports"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                       FontSize="20" FontAttributes="Bold" TextColor="#FFFFFF" Padding="0,10,0,10" />
+                <Label Grid.Row="0" Grid.Column="3" Text="Geography"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                       FontSize="20" FontAttributes="Bold" TextColor="#FFFFFF" Padding="0,10,0,10" />
+                <Label Grid.Row="0" Grid.Column="4" Text="Politics"
+                       HorizontalOptions="FillAndExpand" VerticalOptions="Center"
+                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                       FontSize="20" FontAttributes="Bold" TextColor="#FFFFFF" Padding="0,10,0,10" />
+                <!-- $ grids -->
+                <Button Grid.Row="1" Grid.Column="0" Text="$200" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Animals|200" Clicked="OnCategorySelected" />
+                <Button Grid.Row="1" Grid.Column="1" Text="$200" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Mythology|200" Clicked="OnCategorySelected" />
+                <Button Grid.Row="1" Grid.Column="2" Text="$200" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Sports|200" Clicked="OnCategorySelected" />
+                <Button Grid.Row="1" Grid.Column="3" Text="$200" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Geography|200" Clicked="OnCategorySelected" />
+                <Button Grid.Row="1" Grid.Column="4" Text="$200" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Politics|200" Clicked="OnCategorySelected" />
 
-                <Label Grid.Row="0" Grid.Column="0" Text="Animals" HorizontalOptions="Center" FontSize="18" />
-                <Label Grid.Row="0" Grid.Column="1" Text="Mythology" HorizontalOptions="Center" FontSize="18" />
-                <Label Grid.Row="0" Grid.Column="2" Text="Sports" HorizontalOptions="Center" FontSize="18" />
-                <Label Grid.Row="0" Grid.Column="3" Text="Geography" HorizontalOptions="Center" FontSize="18" />
-                <Label Grid.Row="0" Grid.Column="4" Text="Politics" HorizontalOptions="Center" FontSize="18" />
+                <Button Grid.Row="2" Grid.Column="0" Text="$400" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Animals|400" Clicked="OnCategorySelected" />
+                <Button Grid.Row="2" Grid.Column="1" Text="$400" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Mythology|400" Clicked="OnCategorySelected" />
+                <Button Grid.Row="2" Grid.Column="2" Text="$400" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Sports|400" Clicked="OnCategorySelected" />
+                <Button Grid.Row="2" Grid.Column="3" Text="$400" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Geography|400" Clicked="OnCategorySelected" />
+                <Button Grid.Row="2" Grid.Column="4" Text="$400" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Politics|400" Clicked="OnCategorySelected" />
 
-         
-                <Button Grid.Row="1" Grid.Column="0" Text="$200" CommandParameter="Animals|200" Clicked="OnCategorySelected" />
-                <Button Grid.Row="1" Grid.Column="1" Text="$200" CommandParameter="Mythology|200" Clicked="OnCategorySelected" />
-                <Button Grid.Row="1" Grid.Column="2" Text="$200" CommandParameter="Sports|200" Clicked="OnCategorySelected" />
-                <Button Grid.Row="1" Grid.Column="3" Text="$200" CommandParameter="Geography|200" Clicked="OnCategorySelected" />
-                <Button Grid.Row="1" Grid.Column="4" Text="$200" CommandParameter="Politics|200" Clicked="OnCategorySelected" />
+                <Button Grid.Row="3" Grid.Column="0" Text="$600" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Animals|600" Clicked="OnCategorySelected" />
+                <Button Grid.Row="3" Grid.Column="1" Text="$600" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Mythology|600" Clicked="OnCategorySelected" />
+                <Button Grid.Row="3" Grid.Column="2" Text="$600" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Sports|600" Clicked="OnCategorySelected" />
+                <Button Grid.Row="3" Grid.Column="3" Text="$600" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Geography|600" Clicked="OnCategorySelected" />
+                <Button Grid.Row="3" Grid.Column="4" Text="$600" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Politics|600" Clicked="OnCategorySelected" />
 
-                <Button Grid.Row="2" Grid.Column="0" Text="$400" CommandParameter="Animals|400" Clicked="OnCategorySelected" />
-                <Button Grid.Row="2" Grid.Column="1" Text="$400" CommandParameter="Mythology|400" Clicked="OnCategorySelected" />
-                <Button Grid.Row="2" Grid.Column="2" Text="$400" CommandParameter="Sports|400" Clicked="OnCategorySelected" />
-                <Button Grid.Row="2" Grid.Column="3" Text="$400" CommandParameter="Geography|400" Clicked="OnCategorySelected" />
-                <Button Grid.Row="2" Grid.Column="4" Text="$400" CommandParameter="Politics|400" Clicked="OnCategorySelected" />
+                <Button Grid.Row="4" Grid.Column="0" Text="$800" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Animals|800" Clicked="OnCategorySelected" />
+                <Button Grid.Row="4" Grid.Column="1" Text="$800" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Mythology|800" Clicked="OnCategorySelected" />
+                <Button Grid.Row="4" Grid.Column="2" Text="$800" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Sports|800" Clicked="OnCategorySelected" />
+                <Button Grid.Row="4" Grid.Column="3" Text="$800" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Geography|800" Clicked="OnCategorySelected" />
+                <Button Grid.Row="4" Grid.Column="4" Text="$800" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Politics|800" Clicked="OnCategorySelected" />
 
-                <Button Grid.Row="3" Grid.Column="0" Text="$600" CommandParameter="Animals|600" Clicked="OnCategorySelected" />
-                <Button Grid.Row="3" Grid.Column="1" Text="$600" CommandParameter="Mythology|600" Clicked="OnCategorySelected" />
-                <Button Grid.Row="3" Grid.Column="2" Text="$600" CommandParameter="Sports|600" Clicked="OnCategorySelected" />
-                <Button Grid.Row="3" Grid.Column="3" Text="$600" CommandParameter="Geography|600" Clicked="OnCategorySelected" />
-                <Button Grid.Row="3" Grid.Column="4" Text="$600" CommandParameter="Politics|600" Clicked="OnCategorySelected" />
-
-                <Button Grid.Row="4" Grid.Column="0" Text="$800" CommandParameter="Animals|800" Clicked="OnCategorySelected" />
-                <Button Grid.Row="4" Grid.Column="1" Text="$800" CommandParameter="Mythology|800" Clicked="OnCategorySelected" />
-                <Button Grid.Row="4" Grid.Column="2" Text="$800" CommandParameter="Sports|800" Clicked="OnCategorySelected" />
-                <Button Grid.Row="4" Grid.Column="3" Text="$800" CommandParameter="Geography|800" Clicked="OnCategorySelected" />
-                <Button Grid.Row="4" Grid.Column="4" Text="$800" CommandParameter="Politics|800" Clicked="OnCategorySelected" />
-
-                <Button Grid.Row="5" Grid.Column="0" Text="$1000" CommandParameter="Animals|1000" Clicked="OnCategorySelected" />
-                <Button Grid.Row="5" Grid.Column="1" Text="$1000" CommandParameter="Mythology|1000" Clicked="OnCategorySelected" />
-                <Button Grid.Row="5" Grid.Column="2" Text="$1000" CommandParameter="Sports|1000" Clicked="OnCategorySelected" />
-                <Button Grid.Row="5" Grid.Column="3" Text="$1000" CommandParameter="Geography|1000" Clicked="OnCategorySelected" />
-                <Button Grid.Row="5" Grid.Column="4" Text="$1000" CommandParameter="Politics|1000" Clicked="OnCategorySelected" />
-
-
-                <Button Grid.Row="9" Grid.Column="5" Grid.ColumnSpan="5" Text="Skip to Round 2" Clicked="OnSkipToRound2Clicked" HorizontalOptions="Center" VerticalOptions="Start" />
+                <Button Grid.Row="5" Grid.Column="0" Text="$1000" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Animals|1000" Clicked="OnCategorySelected" />
+                <Button Grid.Row="5" Grid.Column="1" Text="$1000" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Mythology|1000" Clicked="OnCategorySelected" />
+                <Button Grid.Row="5" Grid.Column="2" Text="$1000" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Sports|1000" Clicked="OnCategorySelected" />
+                <Button Grid.Row="5" Grid.Column="3" Text="$1000" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Geography|1000" Clicked="OnCategorySelected" />
+                <Button Grid.Row="5" Grid.Column="4" Text="$1000" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CommandParameter="Politics|1000" Clicked="OnCategorySelected" />
             </Grid>
 
-            <Label x:Name="questionLabel" Text="Question will appear here" FontSize="24" HorizontalOptions="Center" />
-            <Label x:Name="timerLabel" Text="Time: 10s" FontSize="20" HorizontalOptions="Center" VerticalOptions="Start" />
-            <Label x:Name="currentPlayerLabel" Text="Current Player: Player 1" FontSize="18" HorizontalOptions="Center" />
-            <Label x:Name="scoreLabel" Text="Scores: Player 1: 0" />
-            <Label x:Name="correctAnswerLabel" Text="The correct answer will appear here." FontSize="18" HorizontalOptions="Center" VerticalOptions="Start" />
+            <StackLayout x:Name="scoreboardStack" Orientation="Horizontal" HorizontalOptions="Center" Spacing="20" />
+
+            <Button Text="Skip Round" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="End" Clicked="OnSkipRoundClicked" />
+            <Button Text="Save Game" Clicked="OnSaveGameClicked" />
+            <Label x:Name="currentPlayerLabel" Text="Current Player: Player 1" FontSize="18" TextColor="#FFFFFF" HorizontalOptions="Center" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

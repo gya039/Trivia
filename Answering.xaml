@@ -1,25 +1,61 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TriviaApp.Answering">
+             x:Class="TriviaApp.Answering"
+             BackgroundColor="#002868">
+
+    <ContentPage.Resources>
+        <Style x:Key="ActiveBuzzerStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#ffc72c" />
+            <Setter Property="TextColor" Value="#002868" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+        <Style x:Key="InactiveBuzzerStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#444444" />
+            <Setter Property="TextColor" Value="#FFFFFF" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+    </ContentPage.Resources>
+
     <ScrollView>
-        <StackLayout Padding="20">
+        <StackLayout Padding="30" Spacing="20" HorizontalOptions="Center">
+            <Frame BackgroundColor="#1f92b8" CornerRadius="15" Padding="30" HorizontalOptions="Center" WidthRequest="400">
+                <Label x:Name="questionLabel" Text="Question will appear here" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" />
+            </Frame>
+            <!-- labels -->
+            <Label x:Name="playerTurnLabel"
+                   Text="Player's Turn"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
 
-            <Label x:Name="questionLabel" Text="Question will appear here" FontSize="24" HorizontalOptions="Center" />
-            <Label x:Name="timerLabel" Text="Time: 10s" FontSize="18" HorizontalOptions="Center" VerticalOptions="Start" />
-
-            <StackLayout x:Name="buzzerButtonsStack" Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
-                <Button x:Name="buzzerButton1" Text="Player 1 Buzzer" Clicked="OnBuzzIn" />
-                <Button x:Name="buzzerButton2" Text="Player 2 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
-                <Button x:Name="buzzerButton3" Text="Player 3 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
-                <Button x:Name="buzzerButton4" Text="Player 4 Buzzer" Clicked="OnBuzzIn" IsVisible="False" />
+            <Label x:Name="timerLabel" Text="Time Left: 10s" FontSize="18" TextColor="White" HorizontalOptions="Center" />
+            <!-- buzzers -->
+            <StackLayout x:Name="buzzerButtonsStack" Orientation="Horizontal" HorizontalOptions="Center" Spacing="15">
+                <Button x:Name="buzzerButton1" Text="Player 1" Clicked="OnBuzzIn" Style="{StaticResource ActiveBuzzerStyle}" />
+                <Button x:Name="buzzerButton2" Text="Player 2" Clicked="OnBuzzIn" Style="{StaticResource InactiveBuzzerStyle}" IsVisible="False" />
+                <Button x:Name="buzzerButton3" Text="Player 3" Clicked="OnBuzzIn" Style="{StaticResource InactiveBuzzerStyle}" IsVisible="False" />
+                <Button x:Name="buzzerButton4" Text="Player 4" Clicked="OnBuzzIn" Style="{StaticResource InactiveBuzzerStyle}" IsVisible="False" />
             </StackLayout>
-            <Button x:Name="answerButton1" Text="Answer 1" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
-            <Button x:Name="answerButton2" Text="Answer 2" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
-            <Button x:Name="answerButton3" Text="Answer 3" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
-            <Button x:Name="answerButton4" Text="Answer 4" Clicked="OnAnswerClicked" BackgroundColor="#1f92b8" IsEnabled="False" />
 
-            <Button Text="Return to Game Board" Clicked="OnReturnToGameBoard" HorizontalOptions="Center" VerticalOptions="End" />
+            <Grid HorizontalOptions="Center" VerticalOptions="Center" ColumnSpacing="20" RowSpacing="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <!-- answers -->
+                <Button x:Name="answerButton1" Text="Answer 1" Grid.Row="0" Grid.Column="0" Clicked="OnAnswerClicked" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" HeightRequest="50" WidthRequest="150" IsEnabled="False" />
+                <Button x:Name="answerButton2" Text="Answer 2" Grid.Row="0" Grid.Column="1" Clicked="OnAnswerClicked" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" HeightRequest="50" WidthRequest="150" IsEnabled="False" />
+                <Button x:Name="answerButton3" Text="Answer 3" Grid.Row="1" Grid.Column="0" Clicked="OnAnswerClicked" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" HeightRequest="50" WidthRequest="150" IsEnabled="False" />
+                <Button x:Name="answerButton4" Text="Answer 4" Grid.Row="1" Grid.Column="1" Clicked="OnAnswerClicked" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" HeightRequest="50" WidthRequest="150" IsEnabled="False" />
+            </Grid>
+
+            <Button Text="Return to Game Board" Clicked="OnReturnToGameBoard" HorizontalOptions="Center" BackgroundColor="#1f92b8" TextColor="White" FontAttributes="Bold" WidthRequest="200" />
         </StackLayout>
     </ScrollView>
-</ContentPage>  
+</ContentPage>

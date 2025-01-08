@@ -1,21 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="TriviaApp.MainPage">
-
-    <StackLayout Padding="30">
-        <Label Text="Select the Number of Players" FontSize="24" HorizontalOptions="Center" />
-        <Button Text="1 Player" Clicked="OnPlayerCountSelected" />
-        <Button Text="2 Players" Clicked="OnPlayerCountSelected" />
-        <Button Text="3 Players" Clicked="OnPlayerCountSelected" />
-        <Button Text="4 Players" Clicked="OnPlayerCountSelected" />
-        <StackLayout x:Name="playerNameInputs">
-            <Entry x:Name="playerName1" Placeholder="Enter Player 1 Name" IsVisible="False" />
-            <Entry x:Name="playerName2" Placeholder="Enter Player 2 Name" IsVisible="False" />
-            <Entry x:Name="playerName3" Placeholder="Enter Player 3 Name" IsVisible="False" />
-            <Entry x:Name="playerName4" Placeholder="Enter Player 4 Name" IsVisible="False" />
+             x:Class="TriviaApp.MainPage"
+             BackgroundColor="#002868">
+    <StackLayout Padding="30" Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+        <!-- make it look more welcoming-->
+        <Label Text="Welcome to Jeopardy!" FontSize="36" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#ffc72c" />
+        <Label Text="How many teams are playing?" FontSize="20" FontAttributes="Italic" HorizontalOptions="Center" TextColor="White" />
+        
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="10">
+            <Button Text="1 Team" Clicked="OnTeamCountSelected" BackgroundColor="#1f92b8" TextColor="White" CornerRadius="10" WidthRequest="100" />
+            <Button Text="2 Teams" Clicked="OnTeamCountSelected" BackgroundColor="#1f92b8" TextColor="White" CornerRadius="10" WidthRequest="100" />
+            <Button Text="3 Teams" Clicked="OnTeamCountSelected" BackgroundColor="#1f92b8" TextColor="White" CornerRadius="10" WidthRequest="100" />
+            <Button Text="4 Teams" Clicked="OnTeamCountSelected" BackgroundColor="#1f92b8" TextColor="White" CornerRadius="10" WidthRequest="100" />
         </StackLayout>
-        <Button Text="Settings" Clicked="OnSettingsClicked" />
-        <Button x:Name="startGameButton" Text="Start Game" Clicked="OnStartGameClicked" IsEnabled="False" />
+        <StackLayout x:Name="teamNameInputs" IsVisible="False" Spacing="15">
+            <Entry x:Name="teamName1" Placeholder="Enter Team 1 Name" PlaceholderColor="#A9A9A9" BackgroundColor="White" TextColor="#000000" HeightRequest="50" WidthRequest="300" />
+            <Entry x:Name="teamName2" Placeholder="Enter Team 2 Name" PlaceholderColor="#A9A9A9" BackgroundColor="White" TextColor="#000000" IsVisible="False" HeightRequest="50" WidthRequest="300" />
+            <Entry x:Name="teamName3" Placeholder="Enter Team 3 Name" PlaceholderColor="#A9A9A9" BackgroundColor="White" TextColor="#000000" IsVisible="False" HeightRequest="50" WidthRequest="300" />
+            <Entry x:Name="teamName4" Placeholder="Enter Team 4 Name" PlaceholderColor="#A9A9A9" BackgroundColor="White" TextColor="#000000" IsVisible="False" HeightRequest="50" WidthRequest="300" />
+        </StackLayout>
+        <Button x:Name="startGameButton" Text="Start Game" Clicked="OnStartGameClicked" IsEnabled="False" BackgroundColor="#ffc72c" TextColor="#002868" FontAttributes="Bold" CornerRadius="10" Opacity="0" HorizontalOptions="Center" WidthRequest="200" />
+        <Button x:Name="loadGameButton" Text="Load Game" Clicked="OnLoadGameClicked" IsVisible="False" HorizontalOptions="Center" VerticalOptions="Center" />
+
     </StackLayout>
-</ContentPage> 
+</ContentPage>

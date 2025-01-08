@@ -1,80 +1,212 @@
 using System;
+using System.Linq;
 using Microsoft.Maui.Controls;
 
 namespace TriviaApp
 {
     public partial class Answering : ContentPage
     {
+        private string question;
+        private string[] answers;
         private string correctAnswer;
         private int currentDollarAmount;
-        private Action<bool, string> onAnswerCompleted;
-        private bool isTimerRunning = false;
-        private System.Timers.Timer timer;
-        private string currentBuzzerPlayer = "";
         private string[] playerNames;
+        private int activePlayerIndex = -1;
+        private Action<bool> onAnswerCompleted;
+        private bool turnEnded = false;
+        private bool isFinalJeopardy;
+        private int currentPlayerIndex;
+        private bool[] playersAnswered;
+        private int[] wagers;
+        private int[] scores;
+        private bool timerRunning = false;
+        private Action<int[]> updateScoresCallback;
 
-        public Answering(string question, string[] answers, string correctAnswer, int dollarValue, string[] playerNames, Action<bool, string> onAnswerCompleted)
+        public Answering(string question, string[] answers, string correctAnswer, int currentDollarAmount, string[] playerNames, Action<bool> onAnswerCompleted, bool isFinalJeopardy = false, int[] wagers = null, int[] scores = null, Action<int[]> updateScoresCallback = null)
         {
             InitializeComponent();
+            this.question = question;
+            this.answers = answers;
             this.correctAnswer = correctAnswer;
-            this.currentDollarAmount = dollarValue;
+            this.currentDollarAmount = currentDollarAmount;
             this.playerNames = playerNames;
             this.onAnswerCompleted = onAnswerCompleted;
+            this.isFinalJeopardy = isFinalJeopardy;
+            this.wagers = wagers ?? new int[playerNames.Length];
+            this.scores = scores ?? new int[playerNames.Length];
+            this.updateScoresCallback = updateScoresCallback;
 
+            if (isFinalJeopardy)
+            {
+                playersAnswered = new bool[playerNames.Length];
+                currentPlayerIndex = 0;
+            }
+
+            InitializeUI();
+        }
+
+        private void InitializeUI()
+        {
             questionLabel.Text = question;
             answerButton1.Text = answers[0];
             answerButton2.Text = answers[1];
             answerButton3.Text = answers[2];
             answerButton4.Text = answers[3];
 
-            SetupBuzzers();
-            StartTimer();
-        }
-
-        private void SetupBuzzers()
-        {
-            if (playerNames.Length == 1)
+            if (isFinalJeopardy)
             {
-          
-                currentBuzzerPlayer = playerNames[0];
-                EnableAnswerButtons();
                 buzzerButtonsStack.IsVisible = false;
+                StartFinalJeopardyTurn();
             }
             else
             {
-              
-                buzzerButton1.IsVisible = playerNames.Length > 0;
-                buzzerButton2.IsVisible = playerNames.Length > 1;
-                buzzerButton3.IsVisible = playerNames.Length > 2;
-                buzzerButton4.IsVisible = playerNames.Length > 3;
+                buzzerButton1.IsVisible = playerNames.Length >= 1;
+                buzzerButton2.IsVisible = playerNames.Length >= 2;
+                buzzerButton3.IsVisible = playerNames.Length >= 3;
+                buzzerButton4.IsVisible = playerNames.Length >= 4;
+                StartCountdown();
             }
         }
 
-        private void OnBuzzIn(object sender, EventArgs e)
+        private void StartCountdown()
         {
-            if (!isTimerRunning) return;
+            int countdown = 10;
+            timerLabel.Text = $"Time Left: {countdown}s";
 
-            Button buzzerButton = sender as Button;
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            {
+                if (activePlayerIndex != -1)
+                {
+                    return false;
+                }
 
-          
-            currentBuzzerPlayer = buzzerButton?.Text.Replace(" Buzzer", "").Trim();
+                countdown--;
+                timerLabel.Text = $"Time Left: {countdown}s";
 
-            Console.WriteLine($"[DEBUG] Player who buzzed in: {currentBuzzerPlayer}");
+                if (countdown <= 0)
+                {
+                    timerLabel.Text = "Time's Up!";
+                    if (activePlayerIndex == -1)
+                    {
+                        DisplayAlert("Time's Up!", "No one buzzed in! Moving to the next question.", "OK");
+                        Navigation.PopAsync();
+                        return false;
+                    }
 
-            DisableBuzzers();
-            EnableAnswerButtons();
+                    return false;
+                }
 
-            DisplayAlert("Buzzed In", $"{currentBuzzerPlayer} buzzed in!", "OK");
+                return true;
+            });
         }
 
-
-
-        private void DisableBuzzers()
+        private void StartFinalJeopardyTurn()
         {
-            buzzerButton1.IsEnabled = false;
-            buzzerButton2.IsEnabled = false;
-            buzzerButton3.IsEnabled = false;
-            buzzerButton4.IsEnabled = false;
+            if (currentPlayerIndex >= playerNames.Length)
+            {
+                RevealFinalJeopardyResult();
+                return;
+            }
+
+            int countdown = 15;
+            timerLabel.Text = $"{playerNames[currentPlayerIndex]}'s Turn: {countdown}s";
+            playerTurnLabel.Text = $"{playerNames[currentPlayerIndex]}'s Turn";
+            timerRunning = true;
+
+            EnableAnswerButtons();
+
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            {
+                if (currentPlayerIndex >= playerNames.Length)
+                {
+                    return false;
+                }
+
+                countdown--;
+                timerLabel.Text = $"{playerNames[currentPlayerIndex]}'s Turn: {countdown}s";
+
+                if (countdown <= 0 || playersAnswered[currentPlayerIndex])
+                {
+                    if (!playersAnswered[currentPlayerIndex])
+                    {
+                        DisplayAlert("Time's Up!", $"{playerNames[currentPlayerIndex]} did not answer in time.", "OK");
+                        playersAnswered[currentPlayerIndex] = true;
+                    }
+
+                    currentPlayerIndex++;
+                    timerRunning = false;
+
+                    if (currentPlayerIndex >= playerNames.Length)
+                    {
+                        RevealFinalJeopardyResult();
+                    }
+                    else
+                    {
+                        StartFinalJeopardyTurn();
+                    }
+
+                    return false;
+                }
+
+                return true;
+            });
+        }
+        private void EndFinalJeopardy()
+        {
+            Navigation.PopAsync();
+        }
+
+        private void OnAnswerClicked(object sender, EventArgs e)
+        {
+            if (!isFinalJeopardy)
+            {
+                var standardAnswerButton = (Button)sender;
+                bool standardIsCorrect = standardAnswerButton.Text == correctAnswer;
+
+                scores[activePlayerIndex] += standardIsCorrect ? currentDollarAmount : -currentDollarAmount;
+
+                updateScoresCallback?.Invoke(scores.ToArray());
+                onAnswerCompleted?.Invoke(standardIsCorrect);
+
+                activePlayerIndex = -1;
+                turnEnded = true;
+                Navigation.PopAsync();
+                return;
+            }
+
+            if (playersAnswered[currentPlayerIndex])
+            {
+                DisplayAlert("Error", $"{playerNames[currentPlayerIndex]} has already answered.", "OK");
+                return;
+            }
+
+            var finalAnswerButton = (Button)sender;
+            bool finalIsCorrect = finalAnswerButton.Text == correctAnswer;
+
+            playersAnswered[currentPlayerIndex] = true;
+            scores[currentPlayerIndex] += finalIsCorrect ? wagers[currentPlayerIndex] : -wagers[currentPlayerIndex];
+
+            DisplayAlert("Answer Locked", $"{playerNames[currentPlayerIndex]} locked their answer.", "OK");
+
+            DisableAnswerButtons();
+
+            currentPlayerIndex++;
+            StartFinalJeopardyTurn();
+        }
+
+        private void RevealFinalJeopardyResult()
+        {
+            string resultMessage = "Final Jeopardy Results:\n\n";
+
+            for (int i = 0; i < playerNames.Length; i++)
+            {
+                bool isCorrect = scores[i] >= wagers[i];
+                resultMessage += $"{playerNames[i]}: {scores[i]} ({(isCorrect ? "Correct" : "Incorrect")})\n";
+            }
+
+            DisplayAlert("Correct Answer", $"The correct answer is: {correctAnswer}\n\n{resultMessage}", "OK");
+
+            Navigation.PopAsync();
         }
 
         private void EnableAnswerButtons()
@@ -85,85 +217,38 @@ namespace TriviaApp
             answerButton4.IsEnabled = true;
         }
 
-        private void OnAnswerClicked(object sender, EventArgs e)
+        private void DisableAnswerButtons()
         {
-            if (!isTimerRunning || string.IsNullOrEmpty(currentBuzzerPlayer)) return;
-
-            Button clickedButton = sender as Button;
-            string selectedAnswer = clickedButton?.Text;
-
-            timer.Stop();
-            isTimerRunning = false;
-
-            bool isCorrect = selectedAnswer == correctAnswer;
-
-            Console.WriteLine($"[DEBUG] Player: {currentBuzzerPlayer}, Answer: {selectedAnswer}, Correct: {isCorrect}");
- 
-            onAnswerCompleted?.Invoke(isCorrect, currentBuzzerPlayer);
-
-            
-            Device.StartTimer(TimeSpan.FromSeconds(2), () =>
-            {
-                Navigation.PopAsync();
-                return false;
-            });
+            answerButton1.IsEnabled = false;
+            answerButton2.IsEnabled = false;
+            answerButton3.IsEnabled = false;
+            answerButton4.IsEnabled = false;
         }
 
-
-
-        private void HighlightButtons(string selectedAnswer)
+        private void OnBuzzIn(object sender, EventArgs e)
         {
-            ResetButtonColors();
-            if (selectedAnswer == correctAnswer)
-            {
-                HighlightButton(selectedAnswer, Color.FromArgb("#00FF00")); 
-            }
-            else
-            {
-                HighlightButton(selectedAnswer, Color.FromArgb("#FF0000")); 
-            }
+            var buzzer = (Button)sender;
+            activePlayerIndex = buzzer == buzzerButton1 ? 0
+                             : buzzer == buzzerButton2 ? 1
+                             : buzzer == buzzerButton3 ? 2
+                             : 3;
+
+            ResetBuzzerStyles();
+            buzzer.Style = (Style)Resources["ActiveBuzzerStyle"];
+
+            EnableAnswerButtons();
         }
 
-        private void HighlightButton(string answer, Color color)
+        private void ResetBuzzerStyles()
         {
-            if (answer == answerButton1.Text) answerButton1.BackgroundColor = color;
-            if (answer == answerButton2.Text) answerButton2.BackgroundColor = color;
-            if (answer == answerButton3.Text) answerButton3.BackgroundColor = color;
-            if (answer == answerButton4.Text) answerButton4.BackgroundColor = color;
-        }
-
-        private void ResetButtonColors()
-        {
-            answerButton1.BackgroundColor = Color.FromArgb("#1f92b8");
-            answerButton2.BackgroundColor = Color.FromArgb("#1f92b8");
-            answerButton3.BackgroundColor = Color.FromArgb("#1f92b8");
-            answerButton4.BackgroundColor = Color.FromArgb("#1f92b8");
-        }
-
-        private void StartTimer()
-        {
-            timer = new System.Timers.Timer(10000); 
-            timer.Elapsed += OnTimerElapsed;
-            timer.Start();
-            isTimerRunning = true;
-        }
-
-        private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            timer.Stop();
-            isTimerRunning = false;
-
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                DisplayAlert("Time's Up", "You didn't answer in time!", "OK");
-                onAnswerCompleted?.Invoke(false, currentBuzzerPlayer); 
-                Navigation.PopAsync();
-            });
+            buzzerButton1.Style = (Style)Resources["InactiveBuzzerStyle"];
+            buzzerButton2.Style = (Style)Resources["InactiveBuzzerStyle"];
+            buzzerButton3.Style = (Style)Resources["InactiveBuzzerStyle"];
+            buzzerButton4.Style = (Style)Resources["InactiveBuzzerStyle"];
         }
 
         private void OnReturnToGameBoard(object sender, EventArgs e)
         {
-            timer?.Stop();
             Navigation.PopAsync();
         }
     }

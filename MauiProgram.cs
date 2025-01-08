@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using Plugin.Maui.Audio;
 namespace TriviaApp
 {
     public static class MauiProgram
@@ -17,6 +17,7 @@ namespace TriviaApp
 
 #if DEBUG
     		builder.Logging.AddDebug();
+            builder.Services.AddSingleton(AudioManager.Current);
 #endif
 
             return builder.Build();
